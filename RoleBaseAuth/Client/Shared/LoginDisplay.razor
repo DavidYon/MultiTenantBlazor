@@ -3,6 +3,7 @@
 @using RoleBaseAuth.Shared
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
+@inject Tenant tenant
 
 <AuthorizeView>
     <Authorized>
@@ -12,8 +13,8 @@
         <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Log in</a>
+        <a href="@(tenant.Identifier + "/authentication/register")">Register</a>
+        <a href="@(tenant.Identifier + "/authentication/login")">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -21,6 +22,6 @@
     private async Task BeginSignOut(MouseEventArgs args)
     {
         await SignOutManager.SetSignOutState();
-        Navigation.NavigateTo("authentication/logout");
+        Navigation.NavigateTo(tenant.Identifier + "/authentication/logout");
     }
 }

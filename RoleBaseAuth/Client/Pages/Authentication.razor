@@ -1,7 +1,18 @@
 ﻿@page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-<RemoteAuthenticatorView Action="@Action" />
+@inject Tenant tenant
+<RemoteAuthenticatorView Action="@Action" @ref="rav" />
 
 @code{
     [Parameter] public string Action { get; set; }
+    RemoteAuthenticatorView rav;
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            rav.ApplicationPaths.LogInCallbackPath = tenant.Identifier + "/" + rav.ApplicationPaths.LogInCallbackPath;
+            rav.ApplicationPaths.LogInPath = tenant.Identifier + "/" + rav.ApplicationPaths.LogInPath;
+            rav.ApplicationPaths.LogInFailedPath = tenant.Identifier + "/" + rav.ApplicationPaths.LogInFailedPath;
+        }
+    }
 }

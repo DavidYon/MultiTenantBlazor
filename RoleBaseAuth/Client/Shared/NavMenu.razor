@@ -1,4 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject Tenant tenant
+@inject NavigationManager navigationManager
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Auth Demo</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -8,54 +11,54 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="@String.Format("{0}", tenant.Identifier)" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </li>
         <AuthorizeView>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="claims">
+                <NavLink class="nav-link" href="@String.Format("{0}/claims", tenant.Identifier)">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Claims
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="fetchdata">
+                <NavLink class="nav-link" href="@String.Format("{0}/fetchdata", tenant.Identifier)">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="adminfetchdata">
+                <NavLink class="nav-link" href="@String.Format("{0}/adminfetchdata", tenant.Identifier)">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Admin Fetch data
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="marsfetchdata">
+                <NavLink class="nav-link" href="@String.Format("{0}/marsfetchdata", tenant.Identifier)">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Mars Fetch data
                 </NavLink>
             </li>
         </AuthorizeView>
         <AuthorizeView Roles="Administrator">
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="admin">
+                <NavLink class="nav-link" href="@String.Format("{0}/admin", tenant.Identifier)">
                     <span class="oi oi-shield" aria-hidden="true"></span> Administrator
                 </NavLink>
             </li>
         </AuthorizeView>
         <AuthorizeView Roles="Moderator,Administrator">
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="moderator">
+                <NavLink class="nav-link" href="@String.Format("{0}/moderator", tenant.Identifier)">
                     <span class="oi oi-key" aria-hidden="true"></span> Mods & Admins
                 </NavLink>
             </li>
         </AuthorizeView>
         <li class="text-warning"><small>Items below not hidden to demonstrate Auth on the routing</small></li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="admin">
+            <NavLink class="nav-link" href="@String.Format("{0}/admin", tenant.Identifier)">
                 <span class="oi oi-shield" aria-hidden="true"></span> Administrator
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="moderator">
+            <NavLink class="nav-link" href="@String.Format("{0}/moderator", tenant.Identifier)">
                 <span class="oi oi-key" aria-hidden="true"></span> Mods & Admins
             </NavLink>
         </li>
