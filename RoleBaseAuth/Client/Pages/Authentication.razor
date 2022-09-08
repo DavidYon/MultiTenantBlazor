@@ -1,6 +1,7 @@
 ﻿@page "/authentication/{action}"
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject Tenant tenant
+@inject NavigationManager nav
 <RemoteAuthenticatorView Action="@Action" @ref="rav" />
 
 @code{
@@ -10,9 +11,19 @@
     {
         if (firstRender)
         {
-            rav.ApplicationPaths.LogInCallbackPath = tenant.Identifier + "/" + rav.ApplicationPaths.LogInCallbackPath;
-            rav.ApplicationPaths.LogInPath = tenant.Identifier + "/" + rav.ApplicationPaths.LogInPath;
-            rav.ApplicationPaths.LogInFailedPath = tenant.Identifier + "/" + rav.ApplicationPaths.LogInFailedPath;
+            //rav.ApplicationPaths.LogInCallbackPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LoginCallbackPath;
+            //rav.ApplicationPaths.LogInPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LoginPath;
+            //rav.ApplicationPaths.LogInFailedPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LoginFailedPath;
+            //rav.ApplicationPaths.LogOutCallbackPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LogoutCallbackPath;
+            //rav.ApplicationPaths.LogOutFailedPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LogoutFailedPath;
+            //rav.ApplicationPaths.LogOutPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LogoutPath;
+            //rav.ApplicationPaths.LogOutSucceededPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.LogoutSucceededPath;
+            //rav.ApplicationPaths.ProfilePath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.ProfilePath;
+            //rav.ApplicationPaths.RegisterPath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.RegisterPath;
+            //rav.ApplicationPaths.RemoteProfilePath = tenant.Identifier + "/" + RemoteAuthenticationDefaults.RemoteProfilePath;
+            //rav.ApplicationPaths.RemoteRegisterPath = tenant.Identifier + "/" + rav.ApplicationPaths.RemoteRegisterPath;
+
+            //rav.AuthenticationState.ReturnUrl = nav.BaseUri + tenant.Identifier;
         }
     }
 }

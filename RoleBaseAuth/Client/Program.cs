@@ -9,6 +9,7 @@ namespace RoleBaseAuth.Client
     using RoleBaseAuth.Shared;
     using BlazorTenant;
     using System.Collections.Generic;
+    using Microsoft.AspNetCore.Components.Authorization;
 
     public class Program
     {
@@ -19,7 +20,6 @@ namespace RoleBaseAuth.Client
             Tenant t = new Tenant ( "CONNH", CONNH);
             var store = new InMemoryTenantStore();
             store.TryAdd(t);
-
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
@@ -32,6 +32,7 @@ namespace RoleBaseAuth.Client
             builder.Services.AddScoped(typeof(AccountClaimsPrincipalFactory<RemoteUserAccount>), typeof(RolesAccountClaimsPrincipalFactory));
             builder.Services.AddApiAuthorization();
             builder.Services.AddAuthorizationCore(options => options.AddMarsPolicy());
+            builder.Services.AddScoped(typeof(AuthenticationStateProvider), typeof(MultiTenantRemoteAuthenticationService));
             builder.Services.AddMultiTenantancy(store);
             var build = builder.Build();
             build.Services.AddServiceProviderToMultiTenantRoutes();

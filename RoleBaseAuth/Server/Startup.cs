@@ -3,6 +3,8 @@ namespace RoleBaseAuth.Server
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using IdentityModel;
+    using Finbuckle.MultiTenant;
+    using Finbuckle.MultiTenant.Strategies;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -14,6 +16,7 @@ namespace RoleBaseAuth.Server
     using RoleBaseAuth.Server.Data;
     using RoleBaseAuth.Server.Models;
     using RoleBaseAuth.Shared;
+    using System.IO;
 
     public class Startup
     {
@@ -61,6 +64,11 @@ namespace RoleBaseAuth.Server
             {
                 options.AddMarsPolicy();
             });
+
+            services.AddMultiTenant<TenantInfo>()
+                    .WithConfigurationStore()
+                    .WithBasePathStrategy()
+                    .WithPerTenantAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +94,20 @@ namespace RoleBaseAuth.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseMultiTenant();
+            app.Use(async (context, next) =>
+            {
+                var mtc = context.GetMultiTenantContext<TenantInfo>();
+                var tenant = mtc?.TenantInfo;
+                if (tenant != null && mtc.StrategyInfo.StrategyType == typeof(BasePathStrategy))
+                {
+                    context.Request.Path.StartsWithSegments("/" + tenant.Identifier, out var matched, out var newPath);
+                    context.Request.PathBase = Path.Join(context.Request.PathBase, matched);
+                    context.Request.Path = newPath;
+                }
+                await next.Invoke();
+            });
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
