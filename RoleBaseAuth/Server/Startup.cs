@@ -17,6 +17,7 @@ namespace RoleBaseAuth.Server
     using RoleBaseAuth.Server.Models;
     using RoleBaseAuth.Shared;
     using System.IO;
+    using System;
 
     public class Startup
     {
@@ -102,6 +103,10 @@ namespace RoleBaseAuth.Server
                 var tenant = mtc?.TenantInfo;
                 if (tenant != null && mtc.StrategyInfo.StrategyType == typeof(BasePathStrategy))
                 {
+                    if (context.Request.Path.ToString().Contains("_configuration"))
+                    {
+                        Console.WriteLine($"Look at this Uri for the configuration endpoint: {context.Request.Path.ToString()}");
+                    }
                     context.Request.Path.StartsWithSegments("/" + tenant.Identifier, out var matched, out var newPath);
                     context.Request.PathBase = Path.Join(context.Request.PathBase, matched);
                     context.Request.Path = newPath;
