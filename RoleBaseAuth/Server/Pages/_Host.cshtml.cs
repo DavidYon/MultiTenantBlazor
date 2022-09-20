@@ -1,25 +1,38 @@
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Finbuckle.MultiTenant;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RoleBaseAuth.Server.Pages
 {
     public class _HostModel : PageModel
     {
-        public string SiteName { get; set; } = "damienbod";
-        public string PageDescription { get; set; } = "damienbod init description";
-        public void OnGet()
+        public TenantInfo Tenant { get; private set; }
+        public _HostModel(IServiceProvider services)
         {
-            (SiteName, PageDescription) = GetMetaData();
+            try
+            {
+                Tenant = services.GetService<TenantInfo>();
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (Tenant == null)
+                {
+                    Tenant = new TenantInfo
+                    {
+                        Id = "Non_xxxxxx",
+                        Identifier = "",
+                        Name = "No Tenant"
+                    };
+                }
+            }
         }
 
-        private (string, string) GetMetaData()
+        public void OnGet()
         {
-            var metadata = Request.Path.Value switch
-            {
-                "/counter" => ("damienbod/counter", "This is the meta data for the counter"),
-                "/fetchdata" => ("damienbod/fetchdata", "This is the meta data for the fetchdata"),
-                _ => ("damienbod", "general description")
-            };
-            return metadata;
         }
     }
 }
